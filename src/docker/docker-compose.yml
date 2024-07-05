@@ -1,0 +1,16 @@
+
+services:
+  postgres:
+    container_name: postgres-article
+    image: postgres
+    environment:
+       POSTGRES_USER: postgres
+       POSTGRES_PASSWORD: postgres
+       POSTGRES_DB: quick_loc
+    volumes:
+      - ./data:/data/postgres
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+      
