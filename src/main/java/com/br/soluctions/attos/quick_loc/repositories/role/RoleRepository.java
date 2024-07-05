@@ -8,4 +8,6 @@ import com.br.soluctions.attos.quick_loc.entities.roles.Role;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
+    Role findByRoleName(String roleName);
+
 }

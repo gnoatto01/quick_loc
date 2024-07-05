@@ -3,6 +3,9 @@ package com.br.soluctions.attos.quick_loc.entities.users;
 import jakarta.persistence.*;
 import java.util.*;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.br.soluctions.attos.quick_loc.controllers.dto.login.LoginRequest;
 import com.br.soluctions.attos.quick_loc.entities.roles.Role;
 
 @Entity
@@ -62,6 +65,11 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder) {
+
+        return passwordEncoder.matches(loginRequest.password(), this.password);
     }
 
 }
