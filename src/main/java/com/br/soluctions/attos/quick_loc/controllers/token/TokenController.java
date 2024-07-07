@@ -1,6 +1,7 @@
 package com.br.soluctions.attos.quick_loc.controllers.token;
 
 import java.time.Instant;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.soluctions.attos.quick_loc.controllers.dto.login.LoginRequest;
 import com.br.soluctions.attos.quick_loc.controllers.dto.login.LoginResponse;
+import com.br.soluctions.attos.quick_loc.entities.roles.Role;
 import com.br.soluctions.attos.quick_loc.repositories.user.UserRepository;
 
 @RestController
@@ -40,11 +42,17 @@ public class TokenController {
         var now = Instant.now();
         var expiresIn = 300L;
 
+        var scopes = user.get().getRoles() //pega a role do usuario
+                .stream()
+                .map(Role::getRoleName)
+                .collect(Collectors.joining(" "));
+
         var claims = JwtClaimsSet.builder()
                 .issuer("quick_loc")
                 .subject(user.get().getUserId().toString())
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(expiresIn))
+                .claim("scope", scopes) //adiciona a role do usuario no token
                 .build();
 
         var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
