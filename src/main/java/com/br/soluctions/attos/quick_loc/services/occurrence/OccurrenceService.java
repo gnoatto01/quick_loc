@@ -39,6 +39,7 @@ public class OccurrenceService {
         occurrence.setResolutionDate(createOccurrenceDto.resolutionDate());
         occurrence.setUserContat(createOccurrenceDto.userContat());
         occurrence.setOccurrenceFont(createOccurrenceDto.occurrenceFont());
+        occurrence.setActive(createOccurrenceDto.isActive());
 
         return occurrenceRepository.save(occurrence);
     }
@@ -60,19 +61,19 @@ public class OccurrenceService {
         occurrence.setResolutionDate(createOccurrenceDto.resolutionDate());
         occurrence.setUserContat(createOccurrenceDto.userContat());
         occurrence.setOccurrenceFont(createOccurrenceDto.occurrenceFont());
+        occurrence.setActive(createOccurrenceDto.isActive());
 
         return occurrenceRepository.save(occurrence);
     }
 
-    public void deleteOccurrence(Long occurrenceId,
-            JwtAuthenticationToken token) throws Exception {
+    public void occurrenceInactive(Long occurrenceId, JwtAuthenticationToken token) throws Exception {
         var user = userRepository.findById(UUID.fromString(token.getName()));
 
         var occurrence = occurrenceRepository.findById(occurrenceId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)); // se nao existir lança excessao
 
         if (user.get().isAdmin() || occurrence.getUser().getUserId().equals(UUID.fromString(token.getName()))) {
-            occurrenceRepository.deleteById(occurrenceId);
+            occurrenceRepository.occurrenceInactive(occurrenceId);
         } else {
             throw new Exception("You do not have access to this function");
         }

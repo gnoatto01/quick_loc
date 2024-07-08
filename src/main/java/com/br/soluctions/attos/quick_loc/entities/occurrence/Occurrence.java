@@ -3,6 +3,7 @@ package com.br.soluctions.attos.quick_loc.entities.occurrence;
 import java.sql.Date;
 import java.time.Instant;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.br.soluctions.attos.quick_loc.entities.users.User;
@@ -55,6 +56,18 @@ public class Occurrence {
 
     @Column(name = "occurrence_font")
     private String occurrenceFont;
+
+    @Column(name = "is_active")
+    @ColumnDefault("true")
+    private boolean isActive;
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
+    }
 
     public Long getOccurrenceId() {
         return occurrenceId;

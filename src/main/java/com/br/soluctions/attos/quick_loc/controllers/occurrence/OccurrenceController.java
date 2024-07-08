@@ -2,7 +2,6 @@ package com.br.soluctions.attos.quick_loc.controllers.occurrence;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -39,10 +38,11 @@ public class OccurrenceController {
 
     }
 
-    @DeleteMapping("/occurrences/{id}")
-    public ResponseEntity<Void> deleteOccurrence(@PathVariable("id") Long occurrenceId, JwtAuthenticationToken token)
+    @PutMapping("/occurrences/{id}/inactive")
+    public ResponseEntity<Void> occurrenceInactive(@PathVariable("id") Long occurrenceId, JwtAuthenticationToken token)
             throws Exception {
-        occurrenceService.deleteOccurrence(occurrenceId, token);
+        occurrenceService.occurrenceInactive(occurrenceId, token);
+
         return ResponseEntity.ok().build();
     }
 
