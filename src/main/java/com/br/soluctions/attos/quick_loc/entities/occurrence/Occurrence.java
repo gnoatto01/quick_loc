@@ -35,28 +35,26 @@ public class Occurrence {
 
     private String longitude;
 
-    @Column(name = "ocurrence_status")
+    @Column(name = "ocurrence_status", columnDefinition = "varchar(25) default 'Em andamento'")
     private String occurreceStatus;
 
     @Column(name = "occurrence_photo")
     private String occurrencePhoto;
 
-    @Column(name = "occurence_priority")
+    @Column(name = "occurrence_priority")
     private String occurrencePriority;
 
     @Column(name = "responsible_name")
     private String responsibleName;
 
     @Column(name = "resolution_date")
-    private Date resolutionDate; 
+    private Date resolutionDate;
 
     @Column(name = "user_contat")
-    private String userContat; 
+    private String userContat;
 
-    @Column(name = "occurence_font")
-    private String occurenceFont;
-
-    
+    @Column(name = "occurrence_font")
+    private String occurrenceFont;
 
     public Long getOccurrenceId() {
         return occurrenceId;
@@ -162,12 +160,12 @@ public class Occurrence {
         this.userContat = userContat;
     }
 
-    public String getOccurenceFont() {
-        return occurenceFont;
+    public String getOccurrenceFont() {
+        return occurrenceFont;
     }
 
-    public void setOccurenceFont(String occurenceFont) {
-        this.occurenceFont = occurenceFont;
+    public void setOccurrenceFont(String occurrenceFont) {
+        this.occurrenceFont = occurrenceFont;
     }
 
 }

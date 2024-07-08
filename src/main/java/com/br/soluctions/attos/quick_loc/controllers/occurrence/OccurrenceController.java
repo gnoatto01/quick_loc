@@ -36,8 +36,17 @@ public class OccurrenceController {
         var occurrence = new Occurrence();
 
         occurrence.setUser(user.get());
-        occurrence.setOcurrenceDescription(createOccurrenceDto.occurrenceContent());
+        occurrence.setOcurrenceDescription(createOccurrenceDto.occurrenceDescription());
+        occurrence.setWriteLocation(createOccurrenceDto.writeLocation());
+        occurrence.setLatitude(createOccurrenceDto.latitude());
+        occurrence.setLongitude(createOccurrenceDto.longitude());
+        occurrence.setOccurreceStatus(createOccurrenceDto.occurrenceStatus());
+        occurrence.setOccurrencePhoto(createOccurrenceDto.occurrencePhoto());
+        occurrence.setOccurrencePriority(createOccurrenceDto.occurrencePriority());
         occurrence.setResponsibleName(createOccurrenceDto.responsibleName());
+        occurrence.setResolutionDate(createOccurrenceDto.resolutionDate());
+        occurrence.setUserContat(createOccurrenceDto.userContat());
+        occurrence.setOccurrenceFont(createOccurrenceDto.occurrenceFont());
 
         occurrenceRepository.save(occurrence);
 
