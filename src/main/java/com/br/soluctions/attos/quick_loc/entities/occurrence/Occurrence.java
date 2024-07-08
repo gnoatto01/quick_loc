@@ -27,6 +27,7 @@ public class Occurrence {
     private String responsibleName;
 
     @CreationTimestamp
+    @Column(name = "time_of_occurrence")
     private Instant timeOfOccurence;
 
     public Long getOccurrenceId() {

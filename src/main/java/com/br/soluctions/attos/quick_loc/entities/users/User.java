@@ -72,4 +72,10 @@ public class User {
         return passwordEncoder.matches(loginRequest.password(), this.password);
     }
 
+    public boolean isAdmin() {
+        return getRoles()
+                .stream()
+                .anyMatch(role -> role.getRoleName().equalsIgnoreCase(Role.Values.ADMIN.name()));
+    }
+
 }
