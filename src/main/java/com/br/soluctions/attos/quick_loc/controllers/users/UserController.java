@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -21,6 +22,7 @@ import com.br.soluctions.attos.quick_loc.repositories.user.UserRepository;
 import jakarta.transaction.Transactional;
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
 
     private UserRepository userRepository;

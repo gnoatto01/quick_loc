@@ -9,8 +9,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.soluctions.attos.quick_loc.controllers.dto.login.LoginRequest;
@@ -19,6 +21,7 @@ import com.br.soluctions.attos.quick_loc.entities.roles.Role;
 import com.br.soluctions.attos.quick_loc.repositories.user.UserRepository;
 
 @RestController
+@RequestMapping("/api")
 public class TokenController {
     private final JwtEncoder jwtEncoder;
     private final UserRepository userRepository;
@@ -31,6 +34,7 @@ public class TokenController {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         var user = userRepository.findByUsername(loginRequest.username());
@@ -42,7 +46,7 @@ public class TokenController {
         var now = Instant.now();
         var expiresIn = 300L;
 
-        var scopes = user.get().getRoles() //pega a role do usuario
+        var scopes = user.get().getRoles() // pega a role do usuario
                 .stream()
                 .map(Role::getRoleName)
                 .collect(Collectors.joining(" "));
@@ -52,7 +56,8 @@ public class TokenController {
                 .subject(user.get().getUserId().toString())
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(expiresIn))
-                .claim("scope", scopes) //adiciona a role do usuario no token
+                .claim("scope", scopes) // adiciona a role do usuario no token
+                .claim("email", user.get().getEmail())
                 .build();
 
         var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

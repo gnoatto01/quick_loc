@@ -1,7 +1,11 @@
 package com.br.soluctions.attos.quick_loc.controllers.occurrence;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.soluctions.attos.quick_loc.controllers.dto.occurrence.CreateOccurrenceDto;
+import com.br.soluctions.attos.quick_loc.entities.occurrence.Occurrence;
 import com.br.soluctions.attos.quick_loc.services.occurrence.OccurrenceService;
 
 @RestController
@@ -17,6 +22,14 @@ public class OccurrenceController {
 
     public OccurrenceController(OccurrenceService occurrenceService) {
         this.occurrenceService = occurrenceService;
+    }
+
+    @GetMapping("/occurrences")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public ResponseEntity<List<Occurrence>> listAllOccurrences() {
+
+        var occurrences = occurrenceService.listAllOccurrences();
+        return ResponseEntity.ok(occurrences);
     }
 
     @PostMapping("/occurrences")

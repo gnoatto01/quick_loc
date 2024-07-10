@@ -1,5 +1,7 @@
 package com.br.soluctions.attos.quick_loc.services.occurrence;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -77,5 +79,13 @@ public class OccurrenceService {
         } else {
             throw new Exception("You do not have access to this function");
         }
+    }
+
+    public List<Occurrence> listAllOccurrences() {
+        List<Occurrence> occurrences = new ArrayList<>();
+
+        occurrences = occurrenceRepository.findAll();
+
+        return occurrences;
     }
 }
