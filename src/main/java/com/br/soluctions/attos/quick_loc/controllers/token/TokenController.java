@@ -6,6 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,6 +42,20 @@ public class TokenController {
 
         return ResponseEntity.ok(new LoginResponse(jwtValue));
 
+    }
+
+    @PostMapping("/verify-token")
+    public String verifyToken(@RequestHeader("Authorization") @RequestBody String accessToken) {
+
+        accessToken = authenticationService.removeJsonParameters(accessToken);
+
+        boolean isValid = authenticationService.ValidateToken(accessToken);
+
+        if (isValid) {
+            return "Valid token: " + accessToken;
+        } else {
+            return "Invalid token: " + accessToken;
+        }
     }
 
 }

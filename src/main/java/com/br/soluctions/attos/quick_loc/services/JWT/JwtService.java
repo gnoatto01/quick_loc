@@ -3,9 +3,12 @@ package com.br.soluctions.attos.quick_loc.services.JWT;
 import java.time.Instant;
 import java.util.stream.Collectors;
 
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Service;
 
 import com.br.soluctions.attos.quick_loc.controllers.dto.login.LoginRequest;
@@ -16,10 +19,12 @@ import com.br.soluctions.attos.quick_loc.repositories.user.UserRepository;
 public class JwtService {
 
     private final JwtEncoder encoder;
+    private final JwtDecoder decoder;
     private final UserRepository userRepository;
 
-    public JwtService(JwtEncoder encoder, UserRepository userRepository) {
+    public JwtService(JwtEncoder encoder, JwtDecoder decoder, UserRepository userRepository) {
         this.encoder = encoder;
+        this.decoder = decoder;
         this.userRepository = userRepository;
     }
 
@@ -44,6 +49,23 @@ public class JwtService {
         return encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 
-    
+    public boolean validateToken(String accessToken) {
+        try {
+            Instant now = Instant.now();
+            Instant expirationDate;
+
+            Jwt decodedJwt = decoder.decode(accessToken);
+            expirationDate = decodedJwt.getExpiresAt();
+
+            if (expirationDate != null && expirationDate.isAfter(now)) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (JwtException e) {
+            return false;
+        }
+    }
 
 }

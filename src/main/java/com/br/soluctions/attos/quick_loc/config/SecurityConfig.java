@@ -1,9 +1,7 @@
 package com.br.soluctions.attos.quick_loc.config;
 
-
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +24,6 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -44,7 +41,7 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/verifyToken").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/verify-token").permitAll()
                         .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
@@ -69,5 +66,4 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-  
 }
