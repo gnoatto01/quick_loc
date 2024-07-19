@@ -14,6 +14,7 @@ import com.br.soluctions.attos.quick_loc.repositories.user.UserRepository;
 
 @Service
 public class JwtService {
+
     private final JwtEncoder encoder;
     private final UserRepository userRepository;
 
@@ -25,7 +26,7 @@ public class JwtService {
     public String generateToken(LoginRequest loginRequest) {
         var user = userRepository.findByUsername(loginRequest.username());
         Instant now = Instant.now();
-        long expiresIn = 300L;
+        long expiresIn = 1800L;
 
         var scopes = user.get().getRoles() // pega a role do usuario
                 .stream()
@@ -42,5 +43,7 @@ public class JwtService {
 
         return encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
+
+    
 
 }
