@@ -40,6 +40,8 @@ public class AdminUserConfig implements CommandLineRunner {
                 },
                 () -> {
                     var user = new User();
+                    user.setFirstName("Quick");
+                    user.setLastName("Loc");
                     user.setUsername("admin");
                     user.setPassword(bCryptPasswordEncoder.encode("QuickL@c!@#"));
                     user.setEmail("contatognoatto01@gmail.com");

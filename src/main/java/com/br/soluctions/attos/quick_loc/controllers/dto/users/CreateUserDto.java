@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.br.soluctions.attos.quick_loc.entities.roles.Role;
 
-public record CreateUserDto(String username, String password, String email, Set<Role> roles) {
+public record CreateUserDto(String firstName, String lastName, String username, String password, String email,
+        Set<Role> roles) {
 
 }

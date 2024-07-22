@@ -2,11 +2,9 @@ package com.br.soluctions.attos.quick_loc.services.user;
 
 import java.util.*;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
 import com.br.soluctions.attos.quick_loc.controllers.dto.users.CreateUserDto;
 import com.br.soluctions.attos.quick_loc.entities.roles.Role;
 import com.br.soluctions.attos.quick_loc.entities.users.User;
@@ -29,12 +27,15 @@ public class UserService {
     public User createNewUser(CreateUserDto createUserDto) {
         var basicRole = roleRepository.findByRoleName(Role.Values.BASIC.name());
         var userFromDb = userRepository.findByUsername(createUserDto.username()); // verifica se não existe no db
+        var emailFromDb = userRepository.findByEmail(createUserDto.email());
 
-        if (userFromDb.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY);
+        if (userFromDb.isPresent() || emailFromDb.isPresent()) {
+            throw new DataIntegrityViolationException("User already exists"); 
         }
 
         var user = new User();
+        user.setFirstName(createUserDto.firstName());
+        user.setLastName(createUserDto.lastName());
         user.setUsername(createUserDto.username());
         user.setPassword(bCryptPasswordEncoder.encode(createUserDto.password()));
         user.setEmail(createUserDto.email());

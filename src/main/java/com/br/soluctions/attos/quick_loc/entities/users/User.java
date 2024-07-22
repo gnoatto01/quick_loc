@@ -19,8 +19,15 @@ public class User {
     @Column(unique = true)
     private String username;
 
-    private String password;
+    @Column(name = "first_name")
+    private String firstName;
 
+    @Column(name = "last_name")
+    private String lastName;
+
+    private String password;
+    
+    @Column(unique = true)
     private String email;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -76,6 +83,22 @@ public class User {
         return getRoles()
                 .stream()
                 .anyMatch(role -> role.getRoleName().equalsIgnoreCase(Role.Values.ADMIN.name()));
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
 }
