@@ -58,7 +58,6 @@ public class JwtService {
             expirationDate = decodedJwt.getExpiresAt();
 
             if (expirationDate != null && expirationDate.isAfter(now)) {
-                System.out.println(expirationDate);
                 return true;
             } else {
                 return false;

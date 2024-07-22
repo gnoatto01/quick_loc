@@ -17,19 +17,6 @@ public class AuthenticationService {
         return jwtService.generateToken(loginRequest);
     }
 
-    public String removeJsonParameters(String accessToken) {
-
-        if (accessToken.startsWith("Bearer ")) {
-            accessToken = accessToken.substring(7);
-        }
-
-        accessToken = accessToken.replaceAll("[{}]", "");
-        accessToken = accessToken.replaceAll("accessToken", "");
-        accessToken = accessToken.replaceAll("\"", "");
-        accessToken = accessToken.replaceAll(":", "");
-
-        return accessToken;
-    }
 
     public boolean ValidateToken(String accessToken) {
         return jwtService.validateToken(accessToken);

@@ -13,6 +13,7 @@ import com.br.soluctions.attos.quick_loc.controllers.dto.login.LoginRequest;
 import com.br.soluctions.attos.quick_loc.controllers.dto.login.LoginResponse;
 import com.br.soluctions.attos.quick_loc.repositories.user.UserRepository;
 import com.br.soluctions.attos.quick_loc.services.Authentication.AuthenticationService;
+import com.br.soluctions.attos.quick_loc.services.Utils.RemoveJsonParameters;
 
 @RestController
 @RequestMapping("/api")
@@ -20,12 +21,14 @@ public class TokenController {
     private final AuthenticationService authenticationService;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private RemoveJsonParameters removeJsonParameters;
 
     public TokenController(AuthenticationService authenticationService, UserRepository userRepository,
-            BCryptPasswordEncoder bCryptPasswordEncoder) {
+            BCryptPasswordEncoder bCryptPasswordEncoder, RemoveJsonParameters removeJsonParameters) {
         this.authenticationService = authenticationService;
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.removeJsonParameters = removeJsonParameters;
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
@@ -46,7 +49,7 @@ public class TokenController {
     @PostMapping("/verify-token")
     public boolean verifyToken(@RequestBody String accessToken) {
 
-        accessToken = authenticationService.removeJsonParameters(accessToken);
+        accessToken = removeJsonParameters.removeParameters(accessToken, "accessToken");
 
         boolean isValid = authenticationService.ValidateToken(accessToken);
 

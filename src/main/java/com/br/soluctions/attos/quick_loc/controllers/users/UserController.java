@@ -36,6 +36,13 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @CrossOrigin("http://localhost:3000")
+    @PostMapping("/users/verify-email")
+    public ResponseEntity<Void> verifyUserEmail(@RequestBody String email) {
+        userService.verifyEmail(email);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/users")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<List<User>> listUsers() {

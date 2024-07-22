@@ -26,7 +26,7 @@ public class User {
     private String lastName;
 
     private String password;
-    
+
     @Column(unique = true)
     private String email;
 
@@ -74,17 +74,6 @@ public class User {
         this.roles = roles;
     }
 
-    public boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder) {
-
-        return passwordEncoder.matches(loginRequest.password(), this.password);
-    }
-
-    public boolean isAdmin() {
-        return getRoles()
-                .stream()
-                .anyMatch(role -> role.getRoleName().equalsIgnoreCase(Role.Values.ADMIN.name()));
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -99,6 +88,17 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder) {
+
+        return passwordEncoder.matches(loginRequest.password(), this.password);
+    }
+
+    public boolean isAdmin() {
+        return getRoles()
+                .stream()
+                .anyMatch(role -> role.getRoleName().equalsIgnoreCase(Role.Values.ADMIN.name()));
     }
 
 }

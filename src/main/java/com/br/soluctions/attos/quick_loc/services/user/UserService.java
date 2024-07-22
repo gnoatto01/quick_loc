@@ -10,18 +10,22 @@ import com.br.soluctions.attos.quick_loc.entities.roles.Role;
 import com.br.soluctions.attos.quick_loc.entities.users.User;
 import com.br.soluctions.attos.quick_loc.repositories.role.RoleRepository;
 import com.br.soluctions.attos.quick_loc.repositories.user.UserRepository;
+import com.br.soluctions.attos.quick_loc.services.Utils.RemoveJsonParameters;
 
 @Service
 public class UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private RemoveJsonParameters removeJsonParameters;
 
     public UserService(UserRepository userRepository, RoleRepository roleRepository,
-            BCryptPasswordEncoder bCryptPasswordEncoder) {
+            BCryptPasswordEncoder bCryptPasswordEncoder, RemoveJsonParameters removeJsonParameters) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.removeJsonParameters = removeJsonParameters;
+
     }
 
     public User createNewUser(CreateUserDto createUserDto) {
@@ -30,7 +34,7 @@ public class UserService {
         var emailFromDb = userRepository.findByEmail(createUserDto.email());
 
         if (userFromDb.isPresent() || emailFromDb.isPresent()) {
-            throw new DataIntegrityViolationException("User already exists"); 
+            throw new DataIntegrityViolationException("User already exists");
         }
 
         var user = new User();
@@ -42,6 +46,20 @@ public class UserService {
         user.setRoles(Set.of(basicRole));
 
         return userRepository.save(user);
+    }
+
+    public boolean verifyEmail(String email) {
+
+        email = removeJsonParameters.removeParameters(email, "email");
+
+        var emailFromDb = userRepository.findByEmail(email);
+
+        if (emailFromDb.isPresent()) {
+            return true;
+        } else {
+            System.err.println(emailFromDb);
+            throw new DataIntegrityViolationException("e-mail not exists in db");
+        }
     }
 
     public List<User> listAllUsers() {
