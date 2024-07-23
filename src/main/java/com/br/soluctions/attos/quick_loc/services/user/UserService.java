@@ -43,6 +43,8 @@ public class UserService {
         user.setUsername(createUserDto.username());
         user.setPassword(bCryptPasswordEncoder.encode(createUserDto.password()));
         user.setEmail(createUserDto.email());
+        user.setDocument(createUserDto.document() == null ? "-" : createUserDto.document());
+        user.setPhoneNumber(createUserDto.phoneNumber() == null ? "-" : createUserDto.phoneNumber());
         user.setRoles(Set.of(basicRole));
 
         return userRepository.save(user);
