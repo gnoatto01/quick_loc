@@ -29,7 +29,7 @@ public class OccurrenceController {
 
     @CrossOrigin("http://localhost:3000")
     @GetMapping("/occurrences")
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN') || hasAuthority('SCOPE_USER')")
     public ResponseEntity<List<Occurrence>> listAllOccurrences() {
 
         var occurrences = occurrenceService.listAllOccurrences();

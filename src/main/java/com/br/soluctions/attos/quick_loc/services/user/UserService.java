@@ -29,7 +29,7 @@ public class UserService {
     }
 
     public User createNewUser(CreateUserDto createUserDto) {
-        var basicRole = roleRepository.findByRoleName(Role.Values.BASIC.name());
+        var userRole = roleRepository.findByRoleName(Role.Values.USER.name());
         var userFromDb = userRepository.findByUsername(createUserDto.username()); // verifica se não existe no db
         var emailFromDb = userRepository.findByEmail(createUserDto.email());
 
@@ -45,7 +45,7 @@ public class UserService {
         user.setEmail(createUserDto.email());
         user.setDocument(createUserDto.document() == null ? "-" : createUserDto.document());
         user.setPhoneNumber(createUserDto.phoneNumber() == null ? "-" : createUserDto.phoneNumber());
-        user.setRoles(Set.of(basicRole));
+        user.setRoles(Set.of(userRole));
 
         return userRepository.save(user);
     }
