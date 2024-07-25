@@ -36,7 +36,7 @@ public class Occurrence {
 
     private String longitude;
 
-    @Column(name = "ocurrence_status", columnDefinition = "varchar(25) default 'Em andamento'")
+    @Column(name = "occurrence_status")
     private String occurreceStatus;
 
     @Column(name = "occurrence_photo")
@@ -60,6 +60,19 @@ public class Occurrence {
     @Column(name = "is_active")
     @ColumnDefault("true")
     private boolean isActive;
+
+    @PrePersist
+    protected void onCreate() {
+
+        if (occurreceStatus == null) {
+            occurreceStatus = "Em andamento";
+        }
+        if(occurrencePhoto == null){
+            occurrencePhoto = "-"; 
+        }
+        isActive = true; 
+    }
+    
 
     public boolean isActive() {
         return isActive;
