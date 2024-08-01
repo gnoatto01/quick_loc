@@ -46,6 +46,7 @@ public class TokenController {
 
     }
 
+    //TODO: mudar para método Get, usar o Header para passar o token
     @PostMapping("/verify-token")
     public boolean verifyToken(@RequestBody String accessToken) {
 

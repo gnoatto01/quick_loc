@@ -14,7 +14,7 @@ import jakarta.persistence.*;
 @Table(name = "tb_occurrences")
 public class Occurrence {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "occurrence_id")
     private Long occurrenceId;
 

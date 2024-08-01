@@ -39,6 +39,10 @@ public class User {
     @JoinTable(name = "tb_users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
+    @Lob
+    @Column(name = "user_avatar", columnDefinition = "TEXT")
+    private String userAvatar;
+
     public UUID getUserId() {
         return userId;
     }
@@ -109,6 +113,14 @@ public class User {
 
     public void setDocument(String document) {
         this.document = document;
+    }
+
+    public String getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(String userAvatar) {
+        this.userAvatar = userAvatar;
     }
 
     public boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder) {

@@ -64,6 +64,7 @@ public class UserService {
         }
     }
 
+
     public List<User> listAllUsers() {
         List<User> users = new ArrayList<>();
 

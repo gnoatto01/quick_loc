@@ -13,6 +13,8 @@ public class RemoveJsonParameters {
 
         data = data.replaceAll(":", "");
 
+        data = data.replaceAll("Bearer", "");
+
         data = data.replaceAll(dataName, "");
 
         return data;

@@ -7,12 +7,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.soluctions.attos.quick_loc.controllers.dto.users.CreateUserDto;
 
 import com.br.soluctions.attos.quick_loc.entities.users.User;
+import com.br.soluctions.attos.quick_loc.services.JWT.JwtService;
+import com.br.soluctions.attos.quick_loc.services.Utils.RemoveJsonParameters;
 import com.br.soluctions.attos.quick_loc.services.user.UserService;
 
 import jakarta.transaction.Transactional;
@@ -22,9 +25,13 @@ import jakarta.transaction.Transactional;
 public class UserController {
 
     private UserService userService;
+    private JwtService jwtService;
+    private RemoveJsonParameters removeJsonParameters;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, JwtService jwtService, RemoveJsonParameters removeJsonParameters) {
         this.userService = userService;
+        this.jwtService = jwtService;
+        this.removeJsonParameters = removeJsonParameters;
     }
 
     @CrossOrigin("http://localhost:3000")
@@ -48,6 +55,19 @@ public class UserController {
     public ResponseEntity<List<User>> listUsers() {
         var users = userService.listAllUsers();
         return ResponseEntity.ok(users);
+    }
+
+    @CrossOrigin("http://localhost:3000")
+    @GetMapping("/users/get-username")
+    public ResponseEntity<String> getUsername(@RequestHeader("Authorization") String accessToken) {
+
+        accessToken = removeJsonParameters.removeParameters(accessToken, "accessToken");
+
+        System.out.print(accessToken);
+
+        String username = jwtService.getUsernameByTokenId(accessToken);
+
+        return ResponseEntity.ok(username);
     }
 
 }
