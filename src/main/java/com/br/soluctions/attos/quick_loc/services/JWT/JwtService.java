@@ -32,7 +32,7 @@ public class JwtService {
     public String generateToken(LoginRequest loginRequest) {
         var user = userRepository.findByUsername(loginRequest.username());
         Instant now = Instant.now();
-        long expiresIn = 86400L;
+        long expiresIn = 10L;
 
         var scopes = user.get().getRoles() // pega a role do usuario
                 .stream()
