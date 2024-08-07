@@ -1,7 +1,6 @@
 package com.br.soluctions.attos.quick_loc.services.JWT;
 
 import java.time.Instant;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -32,7 +31,7 @@ public class JwtService {
     public String generateToken(LoginRequest loginRequest) {
         var user = userRepository.findByUsername(loginRequest.username());
         Instant now = Instant.now();
-        long expiresIn = 10L;
+        long expiresIn = 86400L;
 
         var scopes = user.get().getRoles() // pega a role do usuario
                 .stream()
@@ -69,22 +68,6 @@ public class JwtService {
         }
     }
 
-    public String getUsernameByTokenId(String accessToken) {
-        try {
-            Jwt decodedJwt = decoder.decode(accessToken);
-
-            String decodedUserId = decodedJwt.getSubject();
-
-            UUID userId = UUID.fromString(decodedUserId);
-
-            var username = userRepository.findById(userId).get().getUsername();
-
-            return username;
-
-        } catch (Exception e) {
-            System.err.println("Error from get username:" + e);
-            return null;
-        }
-    }
+    
 
 }

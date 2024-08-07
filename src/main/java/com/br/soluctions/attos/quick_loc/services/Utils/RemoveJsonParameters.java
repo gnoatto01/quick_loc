@@ -20,5 +20,4 @@ public class RemoveJsonParameters {
         return data;
 
     }
-
 }

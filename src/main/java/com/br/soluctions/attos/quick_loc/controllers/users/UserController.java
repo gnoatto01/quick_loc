@@ -6,6 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.br.soluctions.attos.quick_loc.controllers.dto.users.CreateUserDto;
 
 import com.br.soluctions.attos.quick_loc.entities.users.User;
-import com.br.soluctions.attos.quick_loc.services.JWT.JwtService;
 import com.br.soluctions.attos.quick_loc.services.Utils.RemoveJsonParameters;
 import com.br.soluctions.attos.quick_loc.services.user.UserService;
 
@@ -25,12 +25,10 @@ import jakarta.transaction.Transactional;
 public class UserController {
 
     private UserService userService;
-    private JwtService jwtService;
     private RemoveJsonParameters removeJsonParameters;
 
-    public UserController(UserService userService, JwtService jwtService, RemoveJsonParameters removeJsonParameters) {
+    public UserController(UserService userService, RemoveJsonParameters removeJsonParameters) {
         this.userService = userService;
-        this.jwtService = jwtService;
         this.removeJsonParameters = removeJsonParameters;
     }
 
@@ -40,6 +38,20 @@ public class UserController {
     public ResponseEntity<Void> newUser(@RequestBody CreateUserDto userDto) {
 
         userService.createNewUser(userDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @CrossOrigin("http://localhost:3000")
+    @Transactional
+    @PutMapping("/users")
+    public ResponseEntity<Void> updateUser(@RequestBody CreateUserDto userDto,
+            @RequestHeader("Authorization") String accessToken)
+            throws Exception {
+
+        accessToken = removeJsonParameters.removeParameters(accessToken, "accessToken");
+
+     
+        userService.updateUser(userDto, accessToken);
         return ResponseEntity.ok().build();
     }
 
@@ -58,16 +70,14 @@ public class UserController {
     }
 
     @CrossOrigin("http://localhost:3000")
-    @GetMapping("/users/get-username")
-    public ResponseEntity<String> getUsername(@RequestHeader("Authorization") String accessToken) {
+    @GetMapping("/users/get-user")
+    public ResponseEntity<User> getUser(@RequestHeader("Authorization") String accessToken) {
 
         accessToken = removeJsonParameters.removeParameters(accessToken, "accessToken");
 
-        System.out.print(accessToken);
+        var user = userService.getUserByTokenId(accessToken);
 
-        String username = jwtService.getUsernameByTokenId(accessToken);
-
-        return ResponseEntity.ok(username);
+        return ResponseEntity.ok(user);
     }
 
 }
