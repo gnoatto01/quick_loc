@@ -1,5 +1,6 @@
 package com.br.soluctions.attos.quick_loc.services.user;
 
+import java.io.IOException;
 import java.util.*;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -8,11 +9,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.br.soluctions.attos.quick_loc.controllers.dto.users.CreateUserDto;
 import com.br.soluctions.attos.quick_loc.entities.roles.Role;
 import com.br.soluctions.attos.quick_loc.entities.users.User;
 import com.br.soluctions.attos.quick_loc.repositories.role.RoleRepository;
 import com.br.soluctions.attos.quick_loc.repositories.user.UserRepository;
+import com.br.soluctions.attos.quick_loc.services.Utils.ConvertToBase64;
 import com.br.soluctions.attos.quick_loc.services.Utils.RemoveJsonParameters;
 
 @Service
@@ -23,16 +27,18 @@ public class UserService {
     private RemoveJsonParameters removeJsonParameters;
     private PasswordEncoder passwordEncoder;
     private JwtDecoder jwtDecoder;
+    private ConvertToBase64 convertToBase64;
 
     public UserService(UserRepository userRepository, RoleRepository roleRepository,
             BCryptPasswordEncoder bCryptPasswordEncoder, RemoveJsonParameters removeJsonParameters,
-            PasswordEncoder passwordEncoder, JwtDecoder jwtDecoder) {
+            PasswordEncoder passwordEncoder, JwtDecoder jwtDecoder, ConvertToBase64 convertToBase64) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.removeJsonParameters = removeJsonParameters;
         this.passwordEncoder = passwordEncoder;
         this.jwtDecoder = jwtDecoder;
+        this.convertToBase64 = convertToBase64;
 
     }
 
@@ -78,14 +84,12 @@ public class UserService {
 
     public User updateUser(CreateUserDto createUserDto, String accessToken) throws Exception {
         try {
-        
+
             Jwt decodedJwt = jwtDecoder.decode(accessToken);
             String decodedUserId = decodedJwt.getSubject();
 
             UUID userId = UUID.fromString(decodedUserId);
             var user = userRepository.findById(userId).get();
-
-            System.out.println(createUserDto.firstName());
 
             user.setFirstName(createUserDto.firstName());
             user.setLastName(createUserDto.lastName());
@@ -104,6 +108,21 @@ public class UserService {
             return null;
         }
 
+    }
+
+    public User updateUserAvatar(String accessToken, MultipartFile avatar) throws IOException {
+        Jwt decodedJwt = jwtDecoder.decode(accessToken);
+        String decodedUserId = decodedJwt.getSubject();
+        UUID userId = UUID.fromString(decodedUserId);
+
+        var user = userRepository.findById(userId).get();
+
+        String avatarBase64 = convertToBase64.convertToBase64(avatar);
+
+
+        user.setUserAvatar(avatarBase64);
+
+        return userRepository.save(user);
     }
 
     public boolean verifyEmail(String email) {

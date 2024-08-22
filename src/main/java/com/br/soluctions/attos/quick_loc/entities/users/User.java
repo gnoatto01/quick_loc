@@ -16,6 +16,9 @@ public class User {
     @Column(name = "user_id")
     private UUID userId;
 
+    @Column(name = "tenant_id")
+    private String tentantId;
+
     @Column(unique = true)
     private String username;
 
@@ -39,7 +42,6 @@ public class User {
     @JoinTable(name = "tb_users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    @Lob
     @Column(name = "user_avatar", columnDefinition = "TEXT")
     private String userAvatar;
 

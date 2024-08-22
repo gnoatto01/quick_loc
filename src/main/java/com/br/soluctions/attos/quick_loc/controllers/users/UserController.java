@@ -1,5 +1,6 @@
 package com.br.soluctions.attos.quick_loc.controllers.users;
 
+import java.io.IOException;
 import java.util.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.br.soluctions.attos.quick_loc.controllers.dto.users.CreateUserDto;
 
@@ -50,9 +53,29 @@ public class UserController {
 
         accessToken = removeJsonParameters.removeParameters(accessToken, "accessToken");
 
-     
         userService.updateUser(userDto, accessToken);
         return ResponseEntity.ok().build();
+    }
+
+    @CrossOrigin("http://localhost:3000")
+    @Transactional
+    @PostMapping("/users/change-avatar")
+    public ResponseEntity<Void> updateAvatarUser(@RequestHeader("Authorization") String accessToken,
+            @RequestParam("avatar") MultipartFile avatar) throws IOException {
+
+        accessToken = removeJsonParameters.removeParameters(accessToken, "accessToken");
+
+        if (avatar.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        try {
+            userService.updateUserAvatar(accessToken, avatar);
+            return ResponseEntity.ok().build();
+        } catch (IOException e) {
+            throw new IOException("error in edit avatar image");
+        }
+
     }
 
     @CrossOrigin("http://localhost:3000")
