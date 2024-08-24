@@ -6,9 +6,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.br.soluctions.attos.quick_loc.entities.users.User;
-import com.br.soluctions.attos.quick_loc.repositories.role.RoleRepository;
-import com.br.soluctions.attos.quick_loc.repositories.user.UserRepository;
+import com.br.soluctions.attos.quick_loc.entities.User;
+import com.br.soluctions.attos.quick_loc.repositories.RoleRepository;
+import com.br.soluctions.attos.quick_loc.repositories.UserRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -30,7 +30,7 @@ public class AdminUserConfig implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {
         var roleAdmin = roleRepository
-                .findByRoleName(com.br.soluctions.attos.quick_loc.entities.roles.Role.Values.ADMIN.name());
+                .findByRoleName(com.br.soluctions.attos.quick_loc.entities.Role.Values.ADMIN.name());
 
         var userAdmin = userRepository.findByUsername("admin");
 
